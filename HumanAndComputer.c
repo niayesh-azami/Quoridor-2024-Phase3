@@ -276,7 +276,17 @@ void setWallPos(int PlayerSize) {
 
         if (nextMove == 'l' || nextMove == 'L') {
 
-            if (validWall(PlayerSize, wallStartPoint, wallEndPoint))
+            struct wall newWall;
+
+            newWall.x = (wallStartPoint.x - 50) / PlayerSize;
+            newWall.y = (wallStartPoint.y - 100) / PlayerSize;
+
+            if (wallStartPoint.x != wallEndPoint.x)
+                newWall.dir = 'h';
+            else
+                newWall.dir = 'v';
+
+            if (validWall(newWall))
                 break;
             else
                 invalidInput = 1;

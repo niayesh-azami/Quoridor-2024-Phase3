@@ -1,5 +1,3 @@
-
-
 void graphicComputer() {
 
     // DrawScreen Related Values :
@@ -53,7 +51,8 @@ void graphicComputer() {
                 PlayerSize = (screenWidth - 100) / gameState.size;
 
                 if (!whoWins()) {
-                    nextMove = GetCharPressed();
+                    if (! turnSw)
+                        nextMove = GetCharPressed();
 
                     if (invalidInput) {
                         invalidInput = 0;
@@ -92,36 +91,19 @@ void graphicComputer() {
                             nextMoveProcess(&turnSw, &gameState.player1Pos);
                     }
                     else {
-                        if (nextMove == ' ') {
-                            if (gameState.player2UsedWallNo == gameState.player2WallNo)
-                                invalidInput = 1;
-                            else {
-                                setWallPos(PlayerSize);
 
-                                if (!moveSw) {
-                                    gameState.player2WallList[gameState.player2UsedWallNo].x =
-                                            (wallStartPoint.x - 50) / PlayerSize;
-                                    gameState.player2WallList[gameState.player2UsedWallNo].y =
-                                            (wallStartPoint.y - 100) / PlayerSize;
+                        minimax(true, 5, -inF, inF, true);
 
-                                    if (wallStartPoint.x != wallEndPoint.x)
-                                        gameState.player2WallList[gameState.player2UsedWallNo].dir = 'h';
-                                    else gameState.player2WallList[gameState.player2UsedWallNo].dir = 'v';
-
-                                    blockCell(gameState.player2WallList[gameState.player2UsedWallNo]);
-
-                                    gameState.player2UsedWallNo++;
-                                    turnSw = 0;
-                                } else
-                                    moveSw = 0;
-
-                                wallStartPoint.x = 50, wallStartPoint.y = 100;
-                                wallEndPoint.x = 50, wallEndPoint.y = 100;
-
-                            }
-                        } else
-                            nextMoveProcess(&turnSw, &gameState.player2Pos);
+                        if (computerMove.type == 'p')
+                            gameState.player2Pos = computerMove.playerPos;
+                        else {
+                            blockCell(computerMove.wallPos);
+                            gameState.player2WallList[gameState.player2UsedWallNo] = computerMove.wallPos;
+                            gameState.player2UsedWallNo++;
+                        }
+                        turnSw = 0;
                     }
+
                     drawBoard(PlayerSize);
                 }
                 else

@@ -55,17 +55,7 @@ void unBlockCell(struct wall w) {
     }
 }
 
-int validWall(int PlayerSize, Vector2 start, Vector2 end) {
-
-    struct wall newWall;
-
-    newWall.x = (start.x - 50) / PlayerSize;
-    newWall.y = (start.y - 100) / PlayerSize;
-
-    if (start.x != end.x)
-        newWall.dir = 'h';
-    else
-        newWall.dir = 'v';
+int validWall(struct wall newWall) {
 
     if (overLapWall(newWall)) // check if there is an overlap with another wall :
         return 0;

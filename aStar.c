@@ -29,8 +29,12 @@ int queSize() {
     return rear - front;
 }
 
+
+int cnt = 0;
+
 int aStarAlgorithm(struct position startCell, int row) {
 
+    cnt++;
     front = 0, rear = 0;
 
     memset(closedList, 0, sizeof closedList);
@@ -61,11 +65,22 @@ int aStarAlgorithm(struct position startCell, int row) {
 
         // the cell on the top of the root :
         if (!wallForEachCell[x][y][0]) {
-            if (y - 1 == row) return 1;
 
             int gNew = cellDetails[x][y].g + 1;
             int hNew = abs(row - y + 1);
             int fNew = gNew + hNew;
+
+            if (y - 1 == row) {
+                cellDetails[x][y - 1].g = gNew;
+                /*printf("**************\n");
+                printf("%d %d %d %d\n", cnt, startCell.x, startCell.y, row);
+                for (int i = 0; i < gameState.size; i++) {
+                    for (int j = 0; j < gameState.size; j++)
+                        printf("%d ", cellDetails[j][i].g);
+                    printf("\n");
+                }*/
+                return 1;
+            }
 
             if (! closedList[x][y - 1] && cellDetails[x][y - 1].f > fNew) {
                 queInsert(fNew, x, y - 1);
@@ -92,11 +107,22 @@ int aStarAlgorithm(struct position startCell, int row) {
 
         // the cell on the left side of the root :
         if (!wallForEachCell[x][y][2]) {
-            if (y + 1 == row) return 1;
 
             int gNew = cellDetails[x][y].g + 1;
             int hNew = abs(row - y - 1);
             int fNew = gNew + hNew;
+
+            if (y + 1 == row) {
+                cellDetails[x][y + 1].g = gNew;
+                /*printf("**************\n");
+                printf("%d %d %d %d\n", cnt, startCell.x, startCell.y, row);
+                for (int i = 0; i < gameState.size; i++) {
+                    for (int j = 0; j < gameState.size; j++)
+                        printf("%d ", cellDetails[j][i].g);
+                    printf("\n");
+                }*/
+                return 1;
+            }
 
             if (! closedList[x][y + 1] && cellDetails[x][y + 1].f > fNew) {
                 queInsert(fNew, x, y + 1);
@@ -120,6 +146,16 @@ int aStarAlgorithm(struct position startCell, int row) {
                 cellDetails[x - 1][y].h = hNew;
             }
         }
+
     }
+
+    /*printf("**************\n");
+    printf("%d %d %d %d\n", cnt, startCell.x, startCell.y, row);
+    for (int i = 0; i < gameState.size; i++) {
+        for (int j = 0; j < gameState.size; j++)
+            printf("%d ", cellDetails[j][i].g);
+        printf("\n");
+    }*/
+
     return 0;
 }

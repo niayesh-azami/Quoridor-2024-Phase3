@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <math.h>
 
 const int Mx = 1e4 + 10;
+const double inF = 1e9 + 7;
 
 struct game gameState;
 int wallForEachCell[100][100][5];
@@ -14,8 +16,10 @@ enum opponentType {human = 0, computer} opponent;
 #include "validwall.c"
 #include "HumanAndComputer.c"
 #include "graphicHuman.c"
+#include "minimax.c"
 #include "graphicComputer.c"
 #include "chooseOpponent.c"
+
 
 int main() {
 

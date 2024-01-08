@@ -29,3 +29,9 @@ struct stringInStartingScreen {
     char validValueS;
     char validValueE;
 };
+
+struct move {
+    char type;
+    struct position playerPos;
+    struct wall wallPos;
+};
