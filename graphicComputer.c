@@ -92,7 +92,7 @@ void graphicComputer() {
                     }
                     else {
 
-                        minimax(true, 5, -inF, inF, true);
+                        minimax(true, 4, -inF, inF, true);
 
                         if (computerMove.type == 'p')
                             gameState.player2Pos = computerMove.playerPos;

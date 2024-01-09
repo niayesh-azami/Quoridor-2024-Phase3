@@ -15,14 +15,14 @@ double heuristic() {
 }
 
 double minimax(int isRoot, int depth, int alpha, int beta, int maximizer) {
-    if (whoWins() == 1) return -inF;
-    else if (whoWins() == 2) return inF;
+    if (whoWins() == 1) return (depth + 1) * -inF;
+    else if (whoWins() == 2) return (depth + 1) * inF;
     if (!depth)
         return heuristic();
 
     if (maximizer) {
 
-        double maxEval = -inF;
+        double maxEval = -6 * inF;
 
         int x = gameState.player2Pos.x;
         int y = gameState.player2Pos.y;
@@ -32,72 +32,80 @@ double minimax(int isRoot, int depth, int alpha, int beta, int maximizer) {
         if (!Break && !wallForEachCell[x][y][0]) {
             gameState.player2Pos.y -= 1;
             double eval = minimax(false, depth - 1, alpha, beta, false);
-            maxEval = fmax(maxEval, eval);
 
-            if (isRoot && maxEval == eval) {
-                computerMove.type = 'p';
-                computerMove.playerPos = gameState.player2Pos;
+            if (eval > maxEval) {
+                maxEval = eval;
+                if (isRoot) {
+                    computerMove.type = 'p';
+                    computerMove.playerPos = gameState.player2Pos;
+                }
             }
 
             gameState.player2Pos.y += 1;
 
             alpha = fmax(alpha, eval);
-            if (beta < alpha)
+            if (beta <= alpha)
                 Break = 1;
         }
 
         if (!Break && !wallForEachCell[x][y][1]) {
             gameState.player2Pos.x += 1;
             double eval = minimax(false, depth - 1, alpha, beta, false);
-            maxEval = fmax(maxEval, eval);
 
-            if (isRoot && maxEval == eval) {
-                computerMove.type = 'p';
-                computerMove.playerPos = gameState.player2Pos;
+            if (eval > maxEval) {
+                maxEval = eval;
+                if (isRoot) {
+                    computerMove.type = 'p';
+                    computerMove.playerPos = gameState.player2Pos;
+                }
             }
 
             gameState.player2Pos.x -= 1;
 
             alpha = fmax(alpha, eval);
-            if (beta < alpha)
+            if (beta <= alpha)
                 Break = 1;
         }
 
         if (!Break && !wallForEachCell[x][y][2]) {
             gameState.player2Pos.y += 1;
             double eval = minimax(false, depth - 1, alpha, beta, false);
-            maxEval = fmax(maxEval, eval);
 
-            if (isRoot && maxEval == eval) {
-                computerMove.type = 'p';
-                computerMove.playerPos = gameState.player2Pos;
+            if (eval > maxEval) {
+                maxEval = eval;
+                if (isRoot) {
+                    computerMove.type = 'p';
+                    computerMove.playerPos = gameState.player2Pos;
+                }
             }
 
             gameState.player2Pos.y -= 1;
 
             alpha = fmax(alpha, eval);
-            if (beta < alpha)
+            if (beta <= alpha)
                 Break = 1;
         }
 
         if (!Break && !wallForEachCell[x][y][3]) {
             gameState.player2Pos.x -= 1;
             double eval = minimax(false, depth - 1, alpha, beta, false);
-            maxEval = fmax(maxEval, eval);
 
-            if (isRoot && maxEval == eval) {
-                computerMove.type = 'p';
-                computerMove.playerPos = gameState.player2Pos;
+            if (eval > maxEval) {
+                maxEval = eval;
+                if (isRoot) {
+                    computerMove.type = 'p';
+                    computerMove.playerPos = gameState.player2Pos;
+                }
             }
 
             gameState.player2Pos.x += 1;
 
             alpha = fmax(alpha, eval);
-            if (beta < alpha)
+            if (beta <= alpha)
                 Break = 1;
         }
 
-        if (gameState.player2UsedWallNo == gameState.player2WallNo) Break = 1;
+        if (gameState.player2UsedWallNo >= gameState.player2WallNo) Break = 1;
 
         for (int wallX = 0; !Break && wallX < gameState.size - 1; wallX++)
             for (int wallY = 1; !Break && wallY < gameState.size; wallY++) {
@@ -112,17 +120,19 @@ double minimax(int isRoot, int depth, int alpha, int beta, int maximizer) {
 
                     unBlockCell(newWall);
                     gameState.player2UsedWallNo--;
-                    maxEval = fmax(maxEval, eval);
 
-                    if (isRoot && maxEval == eval) {
-                        computerMove.type = 'w';
-                        computerMove.wallPos.dir = 'h';
-                        computerMove.wallPos.x = newWall.x;
-                        computerMove.wallPos.y = newWall.y;
+                    if (eval > maxEval) {
+                        maxEval = eval;
+                        if (isRoot) {
+                            computerMove.type = 'w';
+                            computerMove.wallPos.dir = 'h';
+                            computerMove.wallPos.x = newWall.x;
+                            computerMove.wallPos.y = newWall.y;
+                        }
                     }
 
                     alpha = fmax(alpha, eval);
-                    if (beta < alpha)
+                    if (beta <= alpha)
                         Break = 1;
                 }
             }
@@ -140,17 +150,19 @@ double minimax(int isRoot, int depth, int alpha, int beta, int maximizer) {
 
                     unBlockCell(newWall);
                     gameState.player2UsedWallNo--;
-                    maxEval = fmax(maxEval, eval);
 
-                    if (isRoot && maxEval == eval) {
-                        computerMove.type = 'w';
-                        computerMove.wallPos.dir = 'v';
-                        computerMove.wallPos.x = newWall.x;
-                        computerMove.wallPos.y = newWall.y;
+                    if (eval > maxEval) {
+                        maxEval = eval;
+                        if (isRoot) {
+                            computerMove.type = 'w';
+                            computerMove.wallPos.dir = 'v';
+                            computerMove.wallPos.x = newWall.x;
+                            computerMove.wallPos.y = newWall.y;
+                        }
                     }
 
                     alpha = fmax(alpha, eval);
-                    if (beta < alpha)
+                    if (beta <= alpha)
                         Break = 1;
                 }
             }
@@ -158,7 +170,7 @@ double minimax(int isRoot, int depth, int alpha, int beta, int maximizer) {
     }
     else {
 
-        double minEval = inF;
+        double minEval = 6 * inF;
 
         int x = gameState.player1Pos.x;
         int y = gameState.player1Pos.y;
@@ -172,7 +184,7 @@ double minimax(int isRoot, int depth, int alpha, int beta, int maximizer) {
             gameState.player1Pos.y += 1;
             minEval = fmin(minEval, eval);
             beta = fmin(beta, eval);
-            if (beta < alpha)
+            if (beta <= alpha)
                 Break = 1;
         }
 
@@ -183,7 +195,7 @@ double minimax(int isRoot, int depth, int alpha, int beta, int maximizer) {
             gameState.player1Pos.x -= 1;
             minEval = fmin(minEval, eval);
             beta = fmin(beta, eval);
-            if (beta < alpha)
+            if (beta <= alpha)
                 Break = 1;
         }
 
@@ -194,7 +206,7 @@ double minimax(int isRoot, int depth, int alpha, int beta, int maximizer) {
             gameState.player1Pos.y -= 1;
             minEval = fmin(minEval, eval);
             beta = fmin(beta, eval);
-            if (beta < alpha)
+            if (beta <= alpha)
                 Break = 1;
         }
 
@@ -205,11 +217,11 @@ double minimax(int isRoot, int depth, int alpha, int beta, int maximizer) {
             gameState.player1Pos.x += 1;
             minEval = fmin(minEval, eval);
             beta = fmin(beta, eval);
-            if (beta < alpha)
+            if (beta <= alpha)
                 Break = 1;
         }
 
-        if (gameState.player1UsedWallNo == gameState.player1WallNo) Break = 1;
+        if (gameState.player1UsedWallNo >= gameState.player1WallNo) Break = 1;
 
         for (int wallX = 0; !Break && wallX < gameState.size - 1; wallX++)
             for (int wallY = 1; !Break && wallY < gameState.size; wallY++) {
@@ -226,7 +238,7 @@ double minimax(int isRoot, int depth, int alpha, int beta, int maximizer) {
                     gameState.player1UsedWallNo--;
                     minEval = fmin(minEval, eval);
                     beta = fmin(beta, eval);
-                    if (beta < alpha)
+                    if (beta <= alpha)
                         Break = 1;
                 }
             }
@@ -242,12 +254,11 @@ double minimax(int isRoot, int depth, int alpha, int beta, int maximizer) {
                     gameState.player1UsedWallNo++;
                     double eval = minimax(false, depth - 1, alpha, beta, true);
 
-
                     unBlockCell(newWall);
                     gameState.player1UsedWallNo--;
                     minEval = fmin(minEval, eval);
                     beta = fmin(beta, eval);
-                    if (beta < alpha)
+                    if (beta <= alpha)
                         Break = 1;
                 }
             }

@@ -4,7 +4,7 @@
 #include <math.h>
 
 const int Mx = 1e4 + 10;
-const double inF = 1e9 + 7;
+const double inF = 1e7 + 7;
 
 struct game gameState;
 int wallForEachCell[100][100][5];
